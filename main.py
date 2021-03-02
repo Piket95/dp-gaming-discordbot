@@ -27,6 +27,7 @@ class MyClient(discord.Client):
 
         self.db = pymysql.connect(host=os.getenv("DBHOST"),
                                   user=os.getenv("DBUSER"),
+                                  password=os.getenv("DBPASS"),
                                   database=os.getenv("DB"))
         self.cursor = self.db.cursor()
         self.cursor.execute("SHOW TABLES LIKE 'games'")
