@@ -46,53 +46,63 @@ class MyClient(discord.Client):
         if message.author == client.user:
             return
 
+        if message.content.startswith("!help"):
+            embed = discord.Embed(title="Befehlsübersicht",
+                                  description="Folgende Befehle sind mir bisher bekannt:",
+                                  color=0x3f51b5)
+            embed.set_author(name="DPGamingBot")
+            await message.channel.send(embed=embed)
+
         if message.content.startswith("!ganyu"):
             await message.channel.send(self.ganyulist[randrange(len(self.ganyulist))])
 
-        if message.content.startswith("!game list"):
-            self.cursor.execute("SELECT * FROM games")
-            results = self.cursor.fetchall()
+        if not isinstance(message.channel, discord.channel.DMChannel):
+            if message.content.startswith("!game list"):
+                self.cursor.execute("SELECT * FROM games")
+                results = self.cursor.fetchall()
 
-            if not results:
-                await message.channel.send("Keine Einträge gefunden!")
-            else:
+                if not results:
+                    await message.channel.send("Keine Einträge gefunden!")
+                else:
+                    msg = ""
+
+                    for row in results:
+                        msg = msg + "- " + row[1] + "\n"
+
+                    await message.channel.send(msg)
+
+            if message.content.startswith("!game add "):
+                game = message.content.replace('!game add ', '')
+
+                try:
+                    self.cursor.execute(f"INSERT INTO games (name) VALUES ('{game}')")
+                    self.db.commit()
+                except:
+                    self.db.rollback()
+
+                await message.channel.send("\"" + game + "\" wurde erfolgreich in die Liste aufgenommen")
+
+            # if message.content.startswith("!game remove "):
+
+            if message.content.startswith("!game next"):
+                await message.delete()
+
                 msg = ""
 
-                for row in results:
-                    msg = msg + "- " + row[1] + "\n"
+                # today = datetime.date.today() + datetime.timedelta(6) # Heute +6 Tage simuliert
+                today = datetime.date.today()
+                wednesday = today + datetime.timedelta((1 - today.weekday()) % 7 + 1)
+                msg = msg + "Nächster Spielabend ist am: " + wednesday.strftime("%d.%m.%Y") + "\n"
+
+                games = self.get_games()
+
+                if not games:
+                    await message.channel.send("Keine Liste mit Spielen in der Datenbank vorhanden!")
+
+                rngGame = games[randrange(len(games))]
+                msg = msg + "Folgendes Spiel wird gespielt: " + rngGame
 
                 await message.channel.send(msg)
-
-        if message.content.startswith("!game add "):
-            game = message.content.replace('!game add ', '')
-
-            try:
-                self.cursor.execute(f"INSERT INTO games (name) VALUES ('{game}')")
-                self.db.commit()
-            except:
-                self.db.rollback()
-
-            await message.channel.send("\"" + game + "\" wurde erfolgreich in die Liste aufgenommen")
-
-        # if message.content.startswith("!game remove "):
-
-        if message.content.startswith("!game next"):
-            msg = ""
-
-            # today = datetime.date.today() + datetime.timedelta(6) # Heute +6 Tage simuliert
-            today = datetime.date.today()
-            wednesday = today + datetime.timedelta((1 - today.weekday()) % 7 + 1)
-            msg = msg + "Nächster Spielabend ist am: " + wednesday.strftime("%d.%m.%Y") + "\n"
-
-            games = self.get_games()
-
-            if not games:
-                await message.channel.send("Keine Liste mit Spielen in der Datenbank vorhanden!")
-
-            rngGame = games[randrange(len(games))]
-            msg = msg + "Folgendes Spiel wird gespielt: " + rngGame
-
-            await message.channel.send(msg)
 
         # HELP Befehl mit Auflistung aller Befehle
 
