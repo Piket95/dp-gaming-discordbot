@@ -1,7 +1,11 @@
-import discord
+from dotenv import load_dotenv
 from random import randrange
+import os
+import discord
 import pymysql
 import datetime
+
+load_dotenv()
 
 
 class MyClient(discord.Client):
@@ -21,9 +25,9 @@ class MyClient(discord.Client):
             "https://img.pr0gramm.com/2021/02/08/3df03ead57d82ff8.jpg"
         ]
 
-        self.db = pymysql.connect(host='localhost',
-                                  user='root',
-                                  database='discordtest')
+        self.db = pymysql.connect(host=os.getenv("DBHOST"),
+                                  user=os.getenv("DBUSER"),
+                                  database=os.getenv("DB"))
         self.cursor = self.db.cursor()
         self.cursor.execute("SHOW TABLES LIKE 'games'")
 
@@ -77,7 +81,7 @@ class MyClient(discord.Client):
 
             # today = datetime.date.today() + datetime.timedelta(6) # Heute +6 Tage simuliert
             today = datetime.date.today()
-            wednesday = today + datetime.timedelta((1-today.weekday()) % 7+1)
+            wednesday = today + datetime.timedelta((1 - today.weekday()) % 7 + 1)
             msg = msg + "Nächster Spielabend ist am: " + wednesday.strftime("%d.%m.%Y") + "\n"
 
             games = self.get_games()
@@ -91,7 +95,8 @@ class MyClient(discord.Client):
             await message.channel.send(msg)
 
         # HELP Befehl mit Auflistung aller Befehle
-		# !game next automatisch jeden Mittwoch abend?
+
+    # !game next automatisch jeden Mittwoch abend?
 
     def get_games(self):
         self.cursor.execute("SELECT * FROM games")
