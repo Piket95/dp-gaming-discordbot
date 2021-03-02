@@ -52,6 +52,12 @@ class MyClient(discord.Client):
                                   description="Folgende Befehle sind mir bisher bekannt:",
                                   color=0x3f51b5)
             embed.set_author(name="DPGamingBot")
+            embed.add_field(name="Spielabend",
+                            value="`!game next` Gibt das Datum des nächsten Spielabend an und das"
+                                  "Spiel das gespielt werden soll"
+                                  "`!game add` Fügt ein Spiel der Liste hinzu"
+                                  "`!game list` Gibt eine Liste der hinterlegten Spiele zurück",
+                            inline=False)
             await message.channel.send(embed=embed)
 
         if message.content.startswith("!ganyu"):
