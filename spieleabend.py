@@ -10,7 +10,7 @@ async def gamelist(cursor, message):
     if not results:
         await message.channel.send("Keine Einträge gefunden!")
     else:
-        msg = ""
+        msg = "Folgende Spiele befinden sich in der Liste:\n"
 
         for row in results:
             msg = msg + "- " + row[1] + "\n"

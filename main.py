@@ -48,27 +48,28 @@ class MyClient(discord.Client):
             embed.add_field(name="Spielabend",
                             value="`!game next` Gibt das Datum des nächsten Spielabend an und das "
                                   "Spiel das gespielt werden soll\n"
-                                  "`!game add` Fügt ein Spiel der Liste hinzu\n"
+                                  "`!game add <Spielname>` Fügt ein Spiel der Liste hinzu\n"
                                   "`!game list` Gibt eine Liste der hinterlegten Spiele zurück\n",
                             inline=False)
             await message.channel.send(embed=embed)
 
         if not isinstance(message.channel, discord.channel.DMChannel):
 
-            await message.delete()
-
             if message.content.startswith("!game list"):
                 await spieleabend.gamelist(self.cursor, message)
             elif message.content.startswith("!game add "):
                 await spieleabend.add_games(message, self.cursor, self.db)
-            # if message.content.startswith("!game remove "):
             elif message.content.startswith("!game next"):
                 await spieleabend.next_game(message, self.cursor)
             else:
-                await message.channel.send("Diesen Befehl kenne ich leider nicht!")
+                if not message.content.startswith("!help"):
+                    await message.channel.send("Diesen Befehl kenne ich leider nicht!")
+
+            await message.delete()
         else:
-            await message.channel.send("Diesen Befehl kenne ich entweder nicht oder ich kann ihn nicht in privaten "
-                                       "Chats ausführen!")
+            if not message.content.startswith("!help"):
+                await message.channel.send("Diesen Befehl kenne ich entweder nicht oder ich kann ihn nicht in "
+                                           "privaten Chats ausführen!")
 
         # TODO: !clear Befehle
 
