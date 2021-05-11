@@ -35,8 +35,8 @@ class MyClient(discord.Client):
     async def on_message(self, message):
         if message.author == client.user:
             return
-
-        await message.delete()
+        elif not message.content.startswith("!"):
+            return
 
         # TODO: Switch Statement benutzen um zu checken, welcher Befehl geschrieben wurde
 
@@ -54,16 +54,21 @@ class MyClient(discord.Client):
             await message.channel.send(embed=embed)
 
         if not isinstance(message.channel, discord.channel.DMChannel):
+
+            await message.delete()
+
             if message.content.startswith("!game list"):
-                spieleabend.gamelist(self.cursor, message)
-
-            if message.content.startswith("!game add "):
-                spieleabend.add_games(message, self.cursor, self.db)
-
+                await spieleabend.gamelist(self.cursor, message)
+            elif message.content.startswith("!game add "):
+                await spieleabend.add_games(message, self.cursor, self.db)
             # if message.content.startswith("!game remove "):
-
-            if message.content.startswith("!game next"):
-                spieleabend.next_game(message, self.cursor)
+            elif message.content.startswith("!game next"):
+                await spieleabend.next_game(message, self.cursor)
+            else:
+                await message.channel.send("Diesen Befehl kenne ich leider nicht!")
+        else:
+            await message.channel.send("Diesen Befehl kenne ich entweder nicht oder ich kann ihn nicht in privaten "
+                                       "Chats ausführen!")
 
         # TODO: !clear Befehle
 

@@ -3,7 +3,7 @@ from random import randrange
 import datetime
 
 
-def gamelist(cursor, message):
+async def gamelist(cursor, message):
     cursor.execute("SELECT * FROM games")
     results = cursor.fetchall()
 
@@ -33,7 +33,7 @@ def get_games(cursor):
     return games
 
 
-def add_games(message, cursor, db):
+async def add_games(message, cursor, db):
     game = message.content.replace('!game add ', '')
 
     try:
@@ -48,7 +48,7 @@ def add_games(message, cursor, db):
 # def del_games():
 
 
-def next_game(message, cursor):
+async def next_game(message, cursor):
     msg = ""
 
     # today = datetime.date.today() + datetime.timedelta(6) # Heute +6 Tage simuliert
