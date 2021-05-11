@@ -75,4 +75,4 @@ class MyClient(discord.Client):
 
 
 client = MyClient()
-client.run("NjE4ODI5ODUxNTYyMDgyMzc1.XW_YNQ.JfMU8QMmaE5z_02t28-YDeamz4Y")
+client.run(os.getenv("DISCORDTOKEN"))
