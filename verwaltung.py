@@ -1,0 +1,1 @@
+# Hier kommen alle Command Funktionen rein, die mit der Verwaltung von Channels und oder Nachrichten usw. zutun haben
