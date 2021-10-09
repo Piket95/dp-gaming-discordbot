@@ -44,7 +44,7 @@ class MyClient(discord.Client):
             embed = discord.Embed(title="Befehlsübersicht",
                                   description="Folgende Befehle sind mir bisher bekannt:",
                                   color=0x3f51b5)
-            embed.set_author(name="DPGamingBot v0.1.1") #TODO: Versionsnummer automatisch hochzählen und hier einfügen
+            embed.set_author(name="DPGamingBot v2021.10.1") #TODO: Versionsnummer automatisch hochzählen und hier einfügen (Year.Month.Build/Patch/Push/o.ä.)
             embed.add_field(name="Spielabend",
                             value="`!game next` Gibt das Datum des nächsten Spielabend an und das "
                                 "Spiel das gespielt werden soll\n"
