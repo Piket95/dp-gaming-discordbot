@@ -44,12 +44,12 @@ class MyClient(discord.Client):
             embed = discord.Embed(title="Befehlsübersicht",
                                   description="Folgende Befehle sind mir bisher bekannt:",
                                   color=0x3f51b5)
-            embed.set_author(name="DPGamingBot")
+            embed.set_author(name="DPGamingBot v0.1.1") #TODO: Versionsnummer automatisch hochzählen und hier einfügen
             embed.add_field(name="Spielabend",
                             value="`!game next` Gibt das Datum des nächsten Spielabend an und das "
-                                  "Spiel das gespielt werden soll\n"
-                                  "`!game add <Spielname>` Fügt ein Spiel der Liste hinzu\n"
-                                  "`!game list` Gibt eine Liste der hinterlegten Spiele zurück\n",
+                                "Spiel das gespielt werden soll\n"
+                                "`!game add <Spielname>` Fügt ein Spiel der Liste hinzu\n"
+                                "`!game list` Gibt eine Liste der hinterlegten Spiele zurück\n",
                             inline=False)
             await message.channel.send(embed=embed)
 
@@ -71,7 +71,7 @@ class MyClient(discord.Client):
                 await message.channel.send("Diesen Befehl kenne ich entweder nicht oder ich kann ihn nicht in "
                                            "privaten Chats ausführen!")
 
-        # TODO: !clear Befehle
+        # TODO: !clear Befehle (mit bestätigung ob auch wirklich kompletter channel gecleared werden soll!)
 
 
 client = MyClient()
